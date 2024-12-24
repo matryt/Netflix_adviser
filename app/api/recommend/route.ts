@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(req: NextRequest) {
     /*const mistralAgentID = process.env.MISTRAL_AGENT_ID;
 
