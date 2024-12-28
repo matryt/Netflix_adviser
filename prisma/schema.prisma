@@ -1,0 +1,93 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model account {
+  id          Int      @id @default(autoincrement())
+  email       String?  @db.VarChar(100)
+  password    String?  @db.VarChar(100)
+  homecountry Int?
+  country     country? @relation(fields: [homecountry], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  watch       watch[]
+}
+
+model actor {
+  id        Int     @id @default(autoincrement())
+  lastname  String? @db.VarChar(50)
+  firstname String? @db.VarChar(50)
+  plays     plays[]
+}
+
+model available {
+  countryid  Int
+  serieid    Int
+  updatedate DateTime? @db.Date
+  country    country   @relation(fields: [countryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  serie      serie     @relation(fields: [serieid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([countryid, serieid])
+}
+
+model country {
+  id        Int         @id @default(autoincrement())
+  name      String?     @db.VarChar(100)
+  account   account[]
+  available available[]
+  serie     serie[]
+}
+
+model genre {
+  id           Int            @id @default(autoincrement())
+  name         String?        @db.VarChar(50)
+  tmdb_id      Int?
+  serie_genres serie_genres[]
+}
+
+model plays {
+  serieid Int
+  actorid Int
+  actor   actor @relation(fields: [actorid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  serie   serie @relation(fields: [serieid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([serieid, actorid])
+}
+
+model serie {
+  id           Int            @id @default(autoincrement())
+  nom          String?        @db.VarChar(50)
+  summary      String?
+  seasonnumber Int?
+  countryfrom  Int
+  available    available[]
+  plays        plays[]
+  country      country        @relation(fields: [countryfrom], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  serie_genres serie_genres[]
+  watch        watch[]
+}
+
+model serie_genres {
+  serieid Int
+  genreid Int
+  genre   genre @relation(fields: [genreid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  serie   serie @relation(fields: [serieid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([serieid, genreid])
+}
+
+model watch {
+  userid    Int
+  serieid   Int
+  watchdate DateTime? @db.Date
+  grade     Int?
+  review    String?
+  serie     serie     @relation(fields: [serieid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  account   account   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([userid, serieid])
+}
