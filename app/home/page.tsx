@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import FormattedRecommandations from '@/app/home/FormattedRecommandations';
-import { SessionProvider } from 'next-auth/react';
 
 export default function Home() {
   const [prompt, setPrompt] = useState('');
