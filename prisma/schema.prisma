@@ -1,17 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-
 model account {
   id          Int      @id @default(autoincrement())
   email       String?  @db.VarChar(100)
-  password    String?  @db.VarChar(100)
   homecountry Int?
   country     country? @relation(fields: [homecountry], references: [id], onDelete: NoAction, onUpdate: NoAction)
   watch       watch[]
@@ -60,10 +58,11 @@ model plays {
 
 model serie {
   id           Int            @id @default(autoincrement())
-  nom          String?        @db.VarChar(50)
+  name         String?        @db.VarChar(50)
   summary      String?
   seasonnumber Int?
   countryfrom  Int
+  poster       String?        @db.VarChar(255)
   available    available[]
   plays        plays[]
   country      country        @relation(fields: [countryfrom], references: [id], onDelete: NoAction, onUpdate: NoAction)

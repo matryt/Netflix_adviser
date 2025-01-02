@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import {getServerSession} from "next-auth";
-import {SessionProviderWrapper} from "@/app/auth/SessionProviderWrapper";
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,15 +24,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
   return (
-      //@ts-expect-error - session is not defined in the global scope
-      <SessionProviderWrapper  session={session}>
-        <html lang="en">
+      <UserProvider>
+        <html lang="fr">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
         </body>
         </html>
-        </SessionProviderWrapper >
+        </UserProvider >
         );
-        }
+}

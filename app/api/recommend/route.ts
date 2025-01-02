@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import {withApiAuthRequired} from "@auth0/nextjs-auth0";
 
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function POST(req: NextRequest) {
+async function recommend(req: NextRequest) {
     /*const mistralAgentID = process.env.MISTRAL_AGENT_ID;
 
     const { prompt, country } = await req.json();
@@ -49,3 +50,5 @@ export async function POST(req: NextRequest) {
             "J'espère que ces suggestions vous seront utiles !\n"
     return NextResponse.json({ message });
 }
+
+export default withApiAuthRequired(recommend);
